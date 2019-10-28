@@ -1,14 +1,15 @@
 <template>
   <div>
     <header class="header">
-      <Logo/>
-
-      <nav class="header__nav">
-        <nuxt-link to="/hello-world">Hello World</nuxt-link>
-        <nuxt-link to="/sample-page">Sample Page</nuxt-link>
-      </nav>
+      <nuxt-link
+        v-if="menu.length > 0"
+        v-for="item in menu"
+        :to="item.url.replace('http://localhost:3080', '')"
+        :key="item.ID"
+        v-text="item.title"
+      ></nuxt-link>
     </header>
-    <nuxt class="container"/>
+    <nuxt class="container" />
   </div>
 </template>
 
@@ -18,13 +19,35 @@ import Logo from '~/components/Logo'
 export default {
   components: {
     Logo
+  },
+  data() {
+    return {
+      menu: []
+    }
+  },
+  created(){
+      this.fetchMenu();
+  },
+  methods: {
+    fetchMenu() {
+        console.log(this.$wp.menu().slug())
+        this.$axios.$get(this.$wp.menu()).then(data => {
+            console.log(data)
+            this.menu = this.objToArray(data)
+        })
+    },
+    objToArray(obj){
+        let result = Object.keys(obj).map(function(key) {
+            return obj[key];
+        });
+        return result
+    }
   }
 }
 </script>
 
-
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Nunito:700,600,400|Open+Sans:400,700');
+/*@import url('https://fonts.googleapis.com/css?family=Nunito:700,600,400|Open+Sans:400,700');*/
 $primary: #37495c;
 $secondary: #48b884;
 
