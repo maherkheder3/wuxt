@@ -5,9 +5,14 @@ const { writeFile, ensureDir } = require('fs-extra')
 
 let extractPayload = function({ html, route }, windowNamespace){
   let chunks = html.split(`<script>window.${windowNamespace}=`)
+  console.log(chunks)
   let pre = chunks[0]
-  let payload = chunks[1].split('</script>').shift()
-  let post = chunks[1].split('</script>').slice(1).join('</script>')
+  let payload = "";
+  let post = "";
+  if(chunks[1]){
+    payload = chunks[1].split('</script>').shift()
+    post = chunks[1].split('</script>').slice(1).join('</script>')
+  }
   let path = route === '/' ? '' : route
 
   return {
