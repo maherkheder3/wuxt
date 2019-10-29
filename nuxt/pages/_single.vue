@@ -12,7 +12,7 @@ export default {
     const { route, app, error } = context
 
     try {
-        console.log(route.params.single)
+        // console.log(route.params.single)
       const single = await app.$wp.slug().name(route.params.single)
       return { single }
     } catch (e) {
@@ -23,6 +23,41 @@ export default {
   components: {
     Page,
     Post
-  }
+  },
+
+  created(){
+      console.log(this.single)
+  },
+
+  jsonld() {
+      return {
+          "@context": "https://schema.org",
+          "@type": "NewsArticle",
+          "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://google.com/article"
+          },
+          "headline": this.single.title.rendered,
+          "datePublished": this.single.date,
+          "description": this.single.content.rendered,
+          "author": {
+              "@type": "Person",
+              "name": "John Doe"
+          },
+          "publisher": {
+              "@type": "Organization",
+              "name": "Google",
+              "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://google.com/logo.jpg"
+              }
+          },
+          "image": [
+              "https://example.com/photos/1x1/photo.jpg",
+              "https://example.com/photos/4x3/photo.jpg",
+              "https://example.com/photos/16x9/photo.jpg"
+          ],
+      };
+  },
 }
 </script>

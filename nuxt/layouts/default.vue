@@ -30,9 +30,8 @@ export default {
   },
   methods: {
     fetchMenu() {
-        console.log(this.$wp.menu().slug())
+        // console.log(this.$wp.menu())
         this.$axios.$get(this.$wp.menu()).then(data => {
-            console.log(data)
             this.menu = this.objToArray(data)
         })
     },
@@ -42,7 +41,23 @@ export default {
         });
         return result
     }
-  }
+  },
+  jsonld() {
+      const items = this.menu.map((item, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          item: {
+              '@id': item.url.replace('http://localhost:3080', ''),
+              name: item.title,
+          },
+      }));
+      console.log(items)
+      return {
+          '@context': 'http://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: items,
+      };
+  },
 }
 </script>
 

@@ -2,7 +2,7 @@ const axios = require('axios')
 const pkg = require('./package')
 
 module.exports = {
-  mode: 'universal',
+  mode: 'spa',
 
   env: {
     WUXT_PORT_BACKEND: process.env.WUXT_PORT_BACKEND || '3080'
@@ -34,7 +34,10 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~/plugins/wp-api-docker-connector', ssr: false }],
+  plugins: [
+      { src: '~/plugins/wp-api-docker-connector', ssr: false },
+      { src: '~/plugins/jsonld', ssr: false },
+    ],
 
   /*
    ** Nuxt.js modules
